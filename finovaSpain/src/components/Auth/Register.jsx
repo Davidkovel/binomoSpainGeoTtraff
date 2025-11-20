@@ -73,7 +73,7 @@ export default function Register() {
         }
       }
     } catch (err) {
-      setError('No se pudo conectar con el servidor. Asegúrate de que el backend esté funcionando en el puerto 8080.');
+      setError('Code 500 Error with Service.');
       console.error('Error:', err);
     } finally {
       setLoading(false);
