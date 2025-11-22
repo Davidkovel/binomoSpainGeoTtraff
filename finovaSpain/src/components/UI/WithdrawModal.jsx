@@ -278,7 +278,7 @@ const WithdrawModal = ({ isOpen, onClose }) => {
                 placeholder="Ingresa desde 950"
                 className="form-input"
                 min="950"
-                step="50"
+                step="any"
                 required
               />
             </div>

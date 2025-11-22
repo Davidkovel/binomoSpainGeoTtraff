@@ -123,7 +123,7 @@ export default function PaymentModal({ isOpen, onClose }) {
               placeholder="Desde 50 USD"
               className="amount-input2"
               min="50"
-              step="50"
+              step="any"
               required
               disabled={loading}
             />
