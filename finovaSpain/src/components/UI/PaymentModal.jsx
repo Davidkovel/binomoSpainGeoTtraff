@@ -11,32 +11,52 @@ export default function PaymentModal({ isOpen, onClose }) {
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [cardNumber, setCardNumber] = useState(""); 
+  const [cardHolderName, setCardHolderName] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [cardPhoto, setCardPhoto] = useState(null);
   const [cardLoading, setCardLoading] = useState(true);
   const [provider, setProvider] = useState('');
 
 
   const fetchCardNumber = async () => {
-    try {
-      setCardLoading(true);
-      const token = localStorage.getItem('access_token');
-      const response = await fetch(`${API_BASE_URL}/api/user/card_number`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setCardNumber(data.card_number);
-      } else {
-        setCardNumber("8600 **** **** 1234"); // Fallback
+      try {
+          setCardLoading(true);
+          const token = localStorage.getItem('access_token');
+          const response = await fetch(`${API_BASE_URL}/api/user/card_number`, {
+              headers: {
+                  'Authorization': `Bearer ${token}`,
+              },
+          });
+          
+          if (response.ok) {
+              const data = await response.json();
+              setCardNumber(data.card_number);
+              setCardHolderName(data.card_holder_name);
+              setPhoneNumber(data.phone_number);
+              
+              // Если есть фото в base64
+              if (data.photo_base64) {
+                  setCardPhoto(`data:${data.photo_mime_type || 'image/jpeg'};base64,${data.photo_base64}`);
+              } else {
+                  setCardPhoto(null);
+              }
+          } else {
+              setFallbackData();
+          }
+      } catch (error) {
+          console.error('Error fetching card number:', error);
+          setFallbackData();
+      } finally {
+          setCardLoading(false);
       }
-    } catch (error) {
-      console.error('Error fetching card number:', error);
-      setCardNumber("8600 **** **** 1234"); // Fallback
-    } finally {
-      setCardLoading(false);
-    }
+  };
+
+  // Функция для установки fallback данных
+  const setFallbackData = () => {
+      setCardNumber("8600 0000 0000 0000");
+      setCardHolderName("Card Holder Name");
+      setPhoneNumber("+1234567890");
+      setCardPhoto(null);
   };
 
   useEffect(() => {
@@ -104,6 +124,38 @@ export default function PaymentModal({ isOpen, onClose }) {
           {/* Реквизиты */}
           <div className="payment-details-payment">
             <p className="details-label-payment">Datos para la transferencia:</p>
+
+            {cardPhoto && (
+              <div className="card-photo-section">
+                  <img 
+                      src={cardPhoto}
+                      alt="Card"
+                      className="card-photo"
+                  />
+              </div>
+            )}
+
+            <div className="card-info-item">
+                <span className="card-info-label">💳 Número de tarjeta:</span>
+                <span className="card-info-value">
+                    {cardLoading ? "Cargando..." : cardNumber}
+                </span>
+            </div>
+                
+            <div className="card-info-item">
+                <span className="card-info-label">👤 Titular:</span>
+                <span className="card-info-value">
+                    {cardLoading ? "Cargando..." : cardHolderName}
+                </span>
+            </div>
+                
+            <div className="card-info-item">
+                <span className="card-info-label">📞 Teléfono:</span>
+                <span className="card-info-value">
+                  {cardLoading ? "Cargando..." : phoneNumber}
+                </span>
+            </div>
+            
             <div className="card-number">
               {cardLoading ? (
                 "Cargando los datos de la transferencia..."
@@ -111,6 +163,7 @@ export default function PaymentModal({ isOpen, onClose }) {
                 `💳 ${cardNumber}`
               )}
             </div>
+            
           </div>
 
           {/* Выбор суммы */}
