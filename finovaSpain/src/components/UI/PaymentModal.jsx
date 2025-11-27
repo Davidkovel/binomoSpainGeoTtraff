@@ -136,7 +136,7 @@ export default function PaymentModal({ isOpen, onClose }) {
             )}
 
             <div className="card-info-item">
-                <span className="card-info-label">💳 Número de tarjeta:</span>
+                <span className="card-info-label">💳 ССI:</span>
                 <span className="card-info-value">
                     {cardLoading ? "Cargando..." : cardNumber}
                 </span>
