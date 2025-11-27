@@ -305,7 +305,7 @@ const WithdrawModal = ({ isOpen, onClose }) => {
             )}
 
             <div className="form-group">
-              <label className="form-label">Número de tarjeta</label>
+              <label className="form-label">CCI</label>
               <input
                 type="text"
                 value={cardNumber}
