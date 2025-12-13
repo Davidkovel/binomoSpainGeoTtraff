@@ -100,10 +100,6 @@ const Header = () => {
     navigate('/balance'); // Переход на страницу баланса
   };
 
-  const handlePosition = () => {
-    navigate('/positions-history'); // Переход на страницу истории позиций
-  };
-
   return (
       <>
       <header className="casino-header">
@@ -117,10 +113,6 @@ const Header = () => {
         <div className="header-right">
           {isAuthenticated ? (
             <>
-              {/*Position History*/}
-              <button className="position-history">
-                <span onClick={handlePosition}>Historial de posiciones</span>
-              </button>
               {/* Зеленый баланс в UZS с зеленым текстом */}
               <div className="balance-container">
                 <div className="balance-amount green-text">
