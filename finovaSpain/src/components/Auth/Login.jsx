@@ -51,7 +51,7 @@ export default function Login() {
         setError(data.message || 'No se pudo iniciar sesión. Por favor, verifica los datos ingresados.');
       }
     } catch (err) {
-      setError('Code 500 Error with Service.');
+      setError('Por favor, presione de nuevo el botón de Iniciar sesión');
       console.error('Error:', err);
     } finally {
       setLoading(false);

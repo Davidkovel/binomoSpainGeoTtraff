@@ -23,6 +23,8 @@
   gap: 2rem;
 }
 
+
+
 /* Оранжевая квадратная кнопка пополнения */
 .deposit-btn.orange-btn {
   background: linear-gradient(135deg, #ff7b00 0%, #ff5500 100%);
@@ -192,6 +194,11 @@
     flex-shrink: 0;
     gap: 0.6rem;
     margin-left: auto; /* Прижимаем к правому краю */
+  }
+
+  .position-history {
+    padding: 8px 8px;
+    font-size: 14px;
   }
   
   .logo {

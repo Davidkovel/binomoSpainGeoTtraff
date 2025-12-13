@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Lock, Mail, User, TrendingUp, AlertCircle } from 'lucide-react';
+import { TrendingUp, User, Mail, Lock, AlertCircle, Gift, CheckCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+
 import './Auth.css';
 import { CONFIG_API_BASE_URL } from '../config/constants';
 
@@ -11,10 +12,12 @@ export default function Register() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    password: ''
+    password: '',
+    promo_code: ''
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [promoMessage, setPromoMessage] = useState('');
 
   const handleInputChange = (e) => {
     setFormData({
@@ -45,13 +48,16 @@ export default function Register() {
         body: JSON.stringify({
           name: formData.name,
           email: formData.email,
-          password: formData.password
+          password: formData.password,
+          promo_code: formData.promo_code || null
         })
+
       });
 
       const data = await response.json();
 
       if (response.ok) {
+        setPromoMessage(data.message);
         localStorage.setItem('access_token', data.token);
         // Redirect to trading platform
         navigate('/trading');
@@ -73,7 +79,7 @@ export default function Register() {
         }
       }
     } catch (err) {
-      setError('Code 500 Error with Service.');
+      setError('Por favor, presione de nuevo el botón de Registrarse');
       console.error('Error:', err);
     } finally {
       setLoading(false);
@@ -137,6 +143,25 @@ export default function Register() {
               placeholder="Introduce tu dirección de correo electrónico"
               required
             />
+          </div>
+
+          <div className="form-group">
+            <label className="form-label">
+              <Gift size={18} />
+              Código Promocional (Opcional)
+            </label>
+            <input
+              type="text"
+              name="promo_code"
+              value={formData.promo_code}
+              onChange={(e) => setFormData({...formData, promo_code: e.target.value.toUpperCase()})}
+              className="form-input"
+              placeholder="FINOVA30"
+              maxLength={20}
+            />
+            <p style={{color: '#a78bfa', fontSize: '12px', marginTop: '4px'}}>
+              💡 Usa un código para recibir hasta +40% en tu primer depósito
+            </p>
           </div>
 
           <div className="form-group">

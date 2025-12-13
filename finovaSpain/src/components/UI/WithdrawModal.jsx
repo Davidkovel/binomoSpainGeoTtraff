@@ -266,7 +266,7 @@ const WithdrawModal = ({ isOpen, onClose }) => {
             </div>
 
             <div className="min-amount-info">
-              💸 Ingresa <strong>950 USD</strong>
+              💸 Ingresa <strong>4180 USD</strong>
             </div>
 
             <div className="form-group">
@@ -275,16 +275,16 @@ const WithdrawModal = ({ isOpen, onClose }) => {
                 type="number"
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
-                placeholder="Ingresa desde 950"
+                placeholder="Ingresa desde 4180"
                 className="form-input"
-                min="950"
+                min="4180"
                 step="any"
                 required
               />
             </div>
 
             {/* Информация о расчетах */}
-            {amount && parseFloat(amount) >= 950 && (
+            {amount && parseFloat(amount) >= 4180 && (
               <div className="calculation-preview">
                 <div className="calculation-row">
                   <span>Monto a retirar:</span>
