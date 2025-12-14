@@ -132,39 +132,89 @@
   border-color: rgba(255, 215, 0, 0.5);
 }
 
-/* Информация о карте */
-.card-info-item {
+.bank-card-item {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 0.5rem 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  gap: 12px;
+  padding: 14px;
+  background: rgba(15, 23, 42, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  margin-bottom: 10px;
+  transition: all 0.3s;
 }
 
-.card-info-item:last-of-type {
-  border-bottom: none;
+.bank-card-item:hover {
+  background: rgba(15, 23, 42, 0.6);
+  border-color: rgba(59, 130, 246, 0.3);
 }
 
-.card-info-label {
-  color: #cbd5e1;
-  font-size: 0.85rem;
+.bank-card-item.bank-header {
+  background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+  border: none;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.bank-card-item.highlight-item {
+  background: rgba(59, 130, 246, 0.1);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.bank-icon {
+  color: #ffffff;
+  flex-shrink: 0;
+}
+
+.detail-icon {
+  color: #94a3b8;
+  flex-shrink: 0;
+}
+
+.bank-card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+}
+
+.bank-card-label {
+  font-size: 12px;
+  color: #94a3b8;
   font-weight: 500;
 }
 
-.card-info-value {
-  color: #fff;
-  font-size: 0.9rem;
+.bank-card-value {
+  font-size: 15px;
+  color: #ffffff;
   font-weight: 600;
-  font-family: monospace;
-  text-align: right;
+  word-break: break-word;
 }
 
-.card-number {
-  font-family: monospace;
-  font-size: 1.1rem;
-  font-weight: bold;
-  color: white;
-  margin: 0.5rem 0;
+.bank-card-value.highlight {
+  font-size: 18px;
+  color: #ffffff;
+  text-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+}
+
+.bank-card-value.mono {
+  font-family: 'Courier New', monospace;
+  letter-spacing: 1px;
+  font-size: 16px;
+}
+
+.card-photo-section {
+  margin-bottom: 16px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.card-photo {
+  width: 100%;
+  height: auto;
+  display: block;
 }
 
 .details-note {
@@ -364,5 +414,21 @@ option {
   
   .card-info-value {
     text-align: left;
+  }
+
+  .bank-card-item {
+    padding: 12px;
+  }
+
+  .bank-card-value {
+    font-size: 14px;
+  }
+
+  .bank-card-value.highlight {
+    font-size: 16px;
+  }
+
+  .bank-card-value.mono {
+    font-size: 14px;
   }
 }

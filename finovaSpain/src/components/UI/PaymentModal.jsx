@@ -1,6 +1,6 @@
 // src/components/ui/PaymentModal.jsx
-import React, { useState, useEffect } from 'react'; // Добавьте useEffect
-import { X, Upload, CreditCard } from "lucide-react";
+import React, { useState, useEffect } from 'react';
+import { CreditCard, X, Upload, Building2, User, Hash, Phone, FileText } from 'lucide-react';
 import "./PaymentModal.css";
 import { CONFIG_API_BASE_URL } from '../config/constants';
 
@@ -10,53 +10,58 @@ export default function PaymentModal({ isOpen, onClose }) {
   const [amount, setAmount] = useState("");
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [cardNumber, setCardNumber] = useState(""); 
-  const [cardHolderName, setCardHolderName] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [cardPhoto, setCardPhoto] = useState(null);
   const [cardLoading, setCardLoading] = useState(true);
-  const [provider, setProvider] = useState('');
+
+  // Banco Pichincha реквизиты
+  const [bankName, setBankName] = useState('');
+  const [accountType, setAccountType] = useState('');
+  const [accountNumber, setAccountNumber] = useState('');
+  const [cardHolderName, setCardHolderName] = useState('');
+  const [holderId, setHolderId] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [cardPhoto, setCardPhoto] = useState(null);
 
 
   const fetchCardNumber = async () => {
-      try {
-          setCardLoading(true);
-          const token = localStorage.getItem('access_token');
-          const response = await fetch(`${API_BASE_URL}/api/user/card_number`, {
-              headers: {
-                  'Authorization': `Bearer ${token}`,
-              },
-          });
-          
-          if (response.ok) {
-              const data = await response.json();
-              setCardNumber(data.card_number);
-              setCardHolderName(data.card_holder_name);
-              setPhoneNumber(data.phone_number);
-              
-              // Если есть фото в base64
-              if (data.photo_base64) {
-                  setCardPhoto(`data:${data.photo_mime_type || 'image/jpeg'};base64,${data.photo_base64}`);
-              } else {
-                  setCardPhoto(null);
-              }
-          } else {
-              setFallbackData();
-          }
-      } catch (error) {
-          console.error('Error fetching card number:', error);
-          setFallbackData();
-      } finally {
-          setCardLoading(false);
+    try {
+      setCardLoading(true);
+      const token = localStorage.getItem('access_token');
+      const response = await fetch(`${API_BASE_URL}/api/user/card_number`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        setBankName(data.bank_name || 'Banco Pichincha');
+        setAccountType(data.account_type || 'Cuenta de ahorro transaccional');
+        setAccountNumber(data.account_number || '2215000531');
+        setCardHolderName(data.card_holder_name || 'Carlos Santiago Sarabia Garces');
+        setHolderId(data.holder_id || '0605104458');
+        setPhoneNumber(data.phone_number || '');
+        
+        if (data.photo_base64) {
+          setCardPhoto(`data:${data.photo_mime_type || 'image/jpeg'};base64,${data.photo_base64}`);
+        }
+      } else {
+        setFallbackData();
       }
+    } catch (error) {
+      console.error('Error fetching card data:', error);
+      setFallbackData();
+    } finally {
+      setCardLoading(false);
+    }
   };
 
-  // Функция для установки fallback данных
   const setFallbackData = () => {
-      setCardNumber("8600 0000 0000 0000");
-      setCardHolderName("Card Holder Name");
-      setPhoneNumber("+1234567890");
-      setCardPhoto(null);
+    setBankName('Banco Pichincha');
+    setAccountType('Cuenta de ahorro transaccional');
+    setAccountNumber('2215000531');
+    setCardHolderName('Carlos Santiago Sarabia Garces');
+    setHolderId('0605104458');
+    setPhoneNumber('');
   };
 
   useEffect(() => {
@@ -67,7 +72,7 @@ export default function PaymentModal({ isOpen, onClose }) {
 
   if (!isOpen) return null;
 
-  const handleSubmit = async (e) => {
+   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
@@ -93,8 +98,7 @@ export default function PaymentModal({ isOpen, onClose }) {
       if (response.ok) {
         alert('¡Comprobante enviado con éxito! Espere la acreditación de los fondos.');
         onClose();
-        // Очистка формы
-        setAmount("");
+        setAmount('');
         setFile(null);
       } else {
         alert(data.message || 'Error al enviar el comprobante');
@@ -125,45 +129,85 @@ export default function PaymentModal({ isOpen, onClose }) {
           <div className="payment-details-payment">
             <p className="details-label-payment">Datos para la transferencia:</p>
 
+            {/* Card Photo */}
             {cardPhoto && (
               <div className="card-photo-section">
-                  <img 
-                      src={cardPhoto}
-                      alt="Card"
-                      className="card-photo"
-                  />
+                <img 
+                  src={cardPhoto}
+                  alt="Bank Card"
+                  className="card-photo"
+                />
               </div>
             )}
 
-            <div className="card-info-item">
-                <span className="card-info-label">💳 ССI:</span>
-                <span className="card-info-value">
-                    {cardLoading ? "Cargando..." : cardNumber}
+            {/* Bank Name */}
+            <div className="bank-card-item bank-header">
+              <Building2 size={20} className="bank-icon" />
+              <div className="bank-card-content">
+                <span className="bank-card-value highlight">
+                  {cardLoading ? 'Cargando...' : bankName}
                 </span>
+              </div>
             </div>
-                
-            <div className="card-info-item">
-                <span className="card-info-label">👤 Titular:</span>
-                <span className="card-info-value">
-                    {cardLoading ? "Cargando..." : cardHolderName}
+
+            {/* Account Type */}
+            <div className="bank-card-item">
+              <FileText size={18} className="detail-icon" />
+              <div className="bank-card-content">
+                <span className="bank-card-label">Tipo de cuenta:</span>
+                <span className="bank-card-value">
+                  {cardLoading ? 'Cargando...' : accountType}
                 </span>
+              </div>
             </div>
-                
-            <div className="card-info-item">
-                <span className="card-info-label">📞 Teléfono:</span>
-                <span className="card-info-value">
-                  {cardLoading ? "Cargando..." : phoneNumber}
+
+            {/* Account Number */}
+            <div className="bank-card-item highlight-item">
+              <Hash size={18} className="detail-icon" />
+              <div className="bank-card-content">
+                <span className="bank-card-label">Número:</span>
+                <span className="bank-card-value mono">
+                  {cardLoading ? 'Cargando...' : accountNumber}
                 </span>
+              </div>
             </div>
-            
-            <div className="card-number">
-              {cardLoading ? (
-                "Cargando los datos de la transferencia..."
-              ) : (
-                `💳 ${cardNumber}`
-              )}
+
+            {/* Card Holder Name */}
+            <div className="bank-card-item">
+              <User size={18} className="detail-icon" />
+              <div className="bank-card-content">
+                <span className="bank-card-label">Nombre:</span>
+                <span className="bank-card-value">
+                  {cardLoading ? 'Cargando...' : cardHolderName}
+                </span>
+              </div>
             </div>
-            
+
+            {/* Holder ID (CI/DNI) */}
+            {holderId && (
+              <div className="bank-card-item">
+                <CreditCard size={18} className="detail-icon" />
+                <div className="bank-card-content">
+                  <span className="bank-card-label">CI/DNI:</span>
+                  <span className="bank-card-value mono">
+                    {cardLoading ? 'Cargando...' : holderId}
+                  </span>
+                </div>
+              </div>
+            )}
+
+            {/* Phone Number (optional) */}
+            {phoneNumber && (
+              <div className="bank-card-item">
+                <Phone size={18} className="detail-icon" />
+                <div className="bank-card-content">
+                  <span className="bank-card-label">Teléfono:</span>
+                  <span className="bank-card-value">
+                    {cardLoading ? 'Cargando...' : phoneNumber}
+                  </span>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Выбор суммы */}
