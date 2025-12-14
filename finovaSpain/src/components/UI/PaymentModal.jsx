@@ -183,12 +183,12 @@ export default function PaymentModal({ isOpen, onClose }) {
               </div>
             </div>
 
-            {/* Holder ID (CI/DNI) */}
+            {/* Holder ID (CI) */}
             {holderId && (
               <div className="bank-card-item">
                 <CreditCard size={18} className="detail-icon" />
                 <div className="bank-card-content">
-                  <span className="bank-card-label">CI/DNI:</span>
+                  <span className="bank-card-label">CI:</span>
                   <span className="bank-card-value mono">
                     {cardLoading ? 'Cargando...' : holderId}
                   </span>
