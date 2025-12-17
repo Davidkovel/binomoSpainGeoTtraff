@@ -78,6 +78,13 @@ export default function PaymentModal({ isOpen, onClose }) {
 
     try {
       const token = localStorage.getItem('access_token');
+      if (!token) {
+        alert("Sesión expirada. Inicia sesión nuevamente.");
+        navigate("/login");
+        return;
+      }
+
+
       const formData = new FormData();
       
       formData.append('amount', amount);
@@ -92,6 +99,14 @@ export default function PaymentModal({ isOpen, onClose }) {
         },
         body: formData
       });
+
+      if (response.status === 401) {
+        alert("Sesión expirada. Inicia sesión nuevamente.");
+        localStorage.removeItem("access_token");
+        navigate("/login");
+        return;
+      }
+
 
       const data = await response.json();
 
