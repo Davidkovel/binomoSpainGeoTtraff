@@ -324,12 +324,6 @@ export default function TradingPlatform() {
       return;
     }
 
-    console.log("Проверка баланса для AI трейдинга:", userBalance);
-    if (userBalance < 1000) {
-      alert('Depósito mínimo para operar: 1000 USD.');
-      return;
-    }
-
     if (entries.length >= 1) {
       alert('❌ Solo se puede mantener una posición activa a la vez.');
       return;
@@ -502,9 +496,9 @@ export default function TradingPlatform() {
       console.log(`⏰ Авто-закрытие позиции ID: ${id}`);
 
       if (entry.type === 'ai') {
-        const profit = 876; // 🔥 фикс
+        const profit = 836; // 🔥 фикс
 
-        const newBalance = userBalance + profit;
+        const newBalance = profit;
 
         balanceUSDRef.current = newBalance;
         setUserBalance(newBalance);
